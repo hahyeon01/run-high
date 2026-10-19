@@ -9,6 +9,7 @@ import { Segmented } from '../../components/Chip.tsx';
 import { Select, Toggle } from '../../components/Field.tsx';
 import { Hero, SheetBody } from '../../components/Header.tsx';
 import { Icon } from '../../components/Icon.tsx';
+import { ExactAlarmHint } from '../../components/ExactAlarmHint.tsx';
 import { Callout, EmptyState, ErrorState, ListSkeleton, Skeleton, Tabs } from '../../components/Misc.tsx';
 import { toast } from '../../components/toast.ts';
 import { dDay, formatYmd, regionLabel, won } from '../../lib/format.ts';
@@ -113,6 +114,7 @@ function InfoTab({ race }: { race: MarathonDto }) {
             />
           </div>
         )}
+        {canAlert && race.my.alert && race.status === 'upcoming' && <ExactAlarmHint />}
         <div className="flex flex-wrap gap-2">
           {race.registrationUrl && (
             <a href={race.registrationUrl} target="_blank" rel="noopener noreferrer" className="inline-flex h-11 items-center gap-1.5 rounded-xl bg-brand px-4 text-[15px] font-semibold text-on-brand hover:bg-brand-strong">

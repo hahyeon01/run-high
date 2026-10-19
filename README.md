@@ -98,6 +98,7 @@ cd android && ./gradlew assembleDebug        # 또는 npx cap open android (Andr
 
 - 최소 Android 8.0 (API 26), JDK 21, Android SDK 36.
 - 권한: 위치(GPS 측정 중에만), 알림(접수 오픈·번개 리마인더 예약 알림), 헬스 커넥트(러닝 운동·거리·경로만 읽기).
+- Android 14부터 ‘알람 및 리마인더’ 권한이 기본으로 꺼져 있어 예약 알림이 몇 분 늦을 수 있어요. 대회 알림을 켜면 앱이 이 권한을 허용하는 화면으로 안내해요.
 - `apps/web/android/app/debug.keystore`는 공용 디버그 키예요. CI가 만든 APK끼리 서명이 같아 덮어 설치가 됩니다. 출시용 서명은 `RUNHIGH_KEYSTORE`, `RUNHIGH_KEYSTORE_PASSWORD`, `RUNHIGH_KEY_ALIAS`, `RUNHIGH_KEY_PASSWORD` 환경 변수로 넣어 `assembleRelease` 하세요.
 - 앱 안 **설정 → 연결**에서 서버 주소를 넣으면 서버 모드로 바뀝니다.
 

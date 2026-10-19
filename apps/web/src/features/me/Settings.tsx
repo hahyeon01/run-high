@@ -9,6 +9,7 @@ import { useMe, useSession } from '../../api/session.ts';
 import { Avatar } from '../../components/Avatar.tsx';
 import { Button } from '../../components/Button.tsx';
 import { Card } from '../../components/Card.tsx';
+import { ExactAlarmHint } from '../../components/ExactAlarmHint.tsx';
 import { Segmented } from '../../components/Chip.tsx';
 import { Field, FormError, Input, Toggle } from '../../components/Field.tsx';
 import { Page, TopBar } from '../../components/Header.tsx';
@@ -128,6 +129,7 @@ export default function Settings() {
               />
             ))}
           </Card>
+          {me.notifyPrefs.raceOpen && <ExactAlarmHint className="mt-3" />}
           {isNative && (
             <Button variant="ghost" size="sm" className="mt-2" onClick={() => void syncReminders().then(() => toast.success('기기 알림 예약을 다시 맞췄어요'))}>
               기기 알림 권한·예약 다시 맞추기

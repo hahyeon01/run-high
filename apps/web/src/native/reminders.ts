@@ -21,6 +21,34 @@ function hhmm(iso: string): string {
   return new Intl.DateTimeFormat('ko-KR', { timeZone: 'Asia/Seoul', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(new Date(iso));
 }
 
+/**
+ * Android 12 이상의 '알람 및 리마인더'(정확한 알람) 허용 여부.
+ * Android 14부터는 기본으로 꺼져 있고, 꺼져 있으면 OS가 알림을 몇 분씩 미룰 수 있어
+ * '접수 10분 전' 알림이 늦게 올 수 있음
+ */
+export async function exactAlarmAllowed(): Promise<boolean> {
+  if (!isNative) return true;
+  try {
+    const { LocalNotifications } = await import('@capacitor/local-notifications');
+    const s = await LocalNotifications.checkExactNotificationSetting();
+    return s.exact_alarm === 'granted';
+  } catch {
+    return true; // 확인할 수 없는 기기에서는 안내하지 않음
+  }
+}
+
+/** 앱의 '알람 및 리마인더' 설정 화면을 열고, 돌아오면 알림 예약을 다시 맞춤 */
+export async function openExactAlarmSetting(): Promise<boolean> {
+  try {
+    const { LocalNotifications } = await import('@capacitor/local-notifications');
+    const s = await LocalNotifications.changeExactNotificationSetting();
+    await syncReminders();
+    return s.exact_alarm === 'granted';
+  } catch {
+    return exactAlarmAllowed();
+  }
+}
+
 export async function syncReminders(): Promise<void> {
   if (!isNative || useSession.getState().status !== 'authed') return;
   const { LocalNotifications } = await import('@capacitor/local-notifications');
