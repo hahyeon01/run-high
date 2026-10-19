@@ -28,7 +28,7 @@ jobs:
       - name: 의존성 설치
         run: npm ci
 
-      - name: 웹 빌드 (데모 모드: 서버 없이 기기 안에서 동작)
+      - name: '웹 빌드 (데모 모드, 서버 없이 기기 안에서 동작)'
         run: npm run build -w @runhigh/web
 
       - name: Capacitor 동기화
