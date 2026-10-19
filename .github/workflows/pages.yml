@@ -1,0 +1,69 @@
+name: 웹 데모 배포 (GitHub Pages)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: 데모 웹 빌드
+    runs-on: ubuntu-latest
+    outputs:
+      enabled: ${{ steps.pages.outputs.enabled }}
+    steps:
+      - name: Pages 사용 여부 확인
+        id: pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh api "repos/${{ github.repository }}/pages" --silent 2>/dev/null; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=GitHub Pages 꺼짐::Settings → Pages → Source를 'GitHub Actions'로 바꾸면 다음 푸시부터 웹 데모가 배포돼요."
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.pages.outputs.enabled == 'true'
+
+      - uses: actions/setup-node@v4
+        if: steps.pages.outputs.enabled == 'true'
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: 빌드
+        if: steps.pages.outputs.enabled == 'true'
+        run: |
+          npm ci
+          npm run build -w @runhigh/web
+
+      - uses: actions/configure-pages@v5
+        if: steps.pages.outputs.enabled == 'true'
+
+      - uses: actions/upload-pages-artifact@v3
+        if: steps.pages.outputs.enabled == 'true'
+        with:
+          path: apps/web/dist
+
+  deploy:
+    name: 배포
+    needs: build
+    if: needs.build.outputs.enabled == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

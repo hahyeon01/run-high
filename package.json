@@ -1,0 +1,29 @@
+{
+  "name": "run-high",
+  "private": true,
+  "version": "0.1.0",
+  "description": "런하이 — 인증된 기록으로 내 페이스에 맞는 러너와 믿고 함께 달리는 러닝 커뮤니티",
+  "license": "MIT",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "npm run dev -w @runhigh/web",
+    "dev:server": "npm run dev -w @runhigh/server",
+    "dev:full": "npm run dev:full -w @runhigh/web",
+    "build": "npm run build -w @runhigh/web && npm run build -w @runhigh/server",
+    "build:web": "npm run build -w @runhigh/web",
+    "build:server": "npm run build -w @runhigh/server",
+    "start": "npm run start -w @runhigh/server",
+    "test": "npm run test -w @runhigh/core && npm run test -w @runhigh/server && npm run test -w @runhigh/web",
+    "typecheck": "npm run typecheck -w @runhigh/core && npm run typecheck -w @runhigh/server && npm run typecheck -w @runhigh/web",
+    "e2e": "npm run e2e -w @runhigh/web",
+    "android:sync": "npm run cap:sync -w @runhigh/web",
+    "android:open": "npm run cap:open -w @runhigh/web"
+  }
+}

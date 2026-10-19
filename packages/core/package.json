@@ -1,0 +1,28 @@
+{
+  "name": "@runhigh/core",
+  "version": "0.1.0",
+  "private": true,
+  "description": "런하이 공용 도메인 로직: 레벨 산출, 번개 자격 판정, 신뢰 점수, DB 스키마, 서비스 계층",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./sqljs": "./src/db/sqljs.ts"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@noble/hashes": "^2.4.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/sql.js": "^1.4.11",
+    "sql.js": "^1.15.0",
+    "typescript": "~6.0.3",
+    "vitest": "^5.0.4"
+  }
+}

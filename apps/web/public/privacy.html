@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>런하이 개인정보 처리방침</title>
+    <style>
+      :root {
+        --bg: #f7f6fd;
+        --surface: #ffffff;
+        --ink: #17142e;
+        --ink-2: #4a4766;
+        --muted: #6f6c8a;
+        --brand: #6d57fc;
+        color-scheme: light dark;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0f1124;
+          --surface: #181a33;
+          --ink: #f1f0fb;
+          --ink-2: #c9c7de;
+          --muted: #9a98b5;
+          --brand: #8f7dff;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: -apple-system, 'Pretendard', 'Noto Sans KR', 'Apple SD Gothic Neo', sans-serif;
+        line-height: 1.65;
+      }
+      main {
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 28px 20px 48px;
+      }
+      h1 {
+        font-size: 24px;
+        margin: 0 0 4px;
+        letter-spacing: -0.02em;
+      }
+      .note {
+        color: var(--muted);
+        font-size: 13px;
+        margin: 0 0 24px;
+      }
+      section {
+        background: var(--surface);
+        border-radius: 20px;
+        padding: 16px 18px;
+        margin-bottom: 14px;
+      }
+      h2 {
+        font-size: 16px;
+        margin: 0 0 6px;
+      }
+      ul {
+        margin: 0;
+        padding-left: 18px;
+        color: var(--ink-2);
+        font-size: 14.5px;
+      }
+      li + li {
+        margin-top: 4px;
+      }
+      strong {
+        color: var(--brand);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>런하이 개인정보 처리방침</h1>
+      <p class="note">서비스 출시 전 법률 검토를 거쳐 확정할 초안이에요.</p>
+
+      <section>
+        <h2>헬스 커넥트에서 읽는 정보</h2>
+        <ul>
+          <li>러닝 운동 세션의 시작·끝 시각, <strong>거리</strong>, <strong>경로</strong>만 읽어요.</li>
+          <li>심박수, 걸음 수, 체중, 영양 등 다른 건강 정보는 요청하지도 읽지도 않아요.</li>
+          <li>읽은 기록은 최근 8주 러닝 레벨(지속 가능 거리·평소 페이스)과 번개 참여 자격 판정에만 써요.</li>
+          <li>가져온 기록은 앱의 ‘내 기록’에서 언제든 지울 수 있고, 권한은 헬스 커넥트 앱에서 끌 수 있어요.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>수집하는 정보</h2>
+        <ul>
+          <li>필수: 이메일, 비밀번호(암호화), 닉네임, 생년월일, 성별, 거주 지역, 러닝 가능 지역</li>
+          <li>본인인증: 휴대폰 번호는 일방향 암호화(해시)와 끝 4자리만 저장해요</li>
+          <li>러닝 기록: 날짜, 거리, 시간, 페이스, 경로, 기록 출처(GPS·파일·헬스 커넥트·직접 입력)</li>
+          <li>선택: 프로필 소개, 게시글 사진</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>위치 정보</h2>
+        <ul>
+          <li>GPS 측정 화면을 켜 둔 동안에만 위치를 받아 거리·페이스·경로를 계산해요.</li>
+          <li>번개 화면의 위치 공유는 누를 때 한 번 현재 위치를 지도 링크로 만들어 직접 보내는 기능이에요. 런하이 서버에 저장하지 않아요.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>공개 범위</h2>
+        <ul>
+          <li>나이·성별·기록 통계·기록 목록의 공개 범위는 앱 설정에서 직접 정해요.</li>
+          <li>기록 통계는 기본적으로 번개·크루에 신청할 때 동의한 경우에만 호스트·운영진에게 보여요.</li>
+          <li>휴대폰 번호와 생년월일은 다른 회원에게 보이지 않아요.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>보관과 파기</h2>
+        <ul>
+          <li>탈퇴하면 이메일·닉네임·연락처 정보를 지우고, 함께한 번개·후기 기록은 ‘탈퇴한 러너’로 남겨요.</li>
+          <li>휴대폰 인증 요청 기록은 만료 후 하루 안에, 알림은 120일이 지나면 지워요.</li>
+          <li>데모 모드에서는 모든 정보가 이 기기 안에만 저장되고 서버로 보내지 않아요.</li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>

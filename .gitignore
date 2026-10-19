@@ -1,0 +1,44 @@
+# dependencies
+node_modules/
+
+# builds
+dist/
+build/
+*.tsbuildinfo
+coverage/
+
+# server runtime data
+apps/server/data/
+
+# test output
+apps/web/test-results/
+apps/web/playwright-report/
+apps/web/e2e/.artifacts/
+
+# env
+.env
+.env.*
+!.env.example
+
+# editors / OS
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.log
+npm-debug.log*
+
+# Android (Capacitor)
+apps/web/android/.gradle/
+apps/web/android/build/
+apps/web/android/app/build/
+apps/web/android/local.properties
+apps/web/android/capacitor-cordova-android-plugins/build/
+apps/web/android/app/src/main/assets/public/
+apps/web/android/app/src/main/assets/capacitor.config.json
+apps/web/android/app/src/main/assets/capacitor.plugins.json
+apps/web/android/app/src/main/res/xml/config.xml
+*.apk
+*.aab
+*.keystore
+!debug.keystore

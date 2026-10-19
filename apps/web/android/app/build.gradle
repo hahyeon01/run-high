@@ -1,0 +1,79 @@
+apply plugin: 'com.android.application'
+
+android {
+    namespace = "app.runhigh"
+    compileSdk = rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "app.runhigh"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        // CI에서는 실행 번호로 버전 코드를 올려 새 APK를 덮어 설치할 수 있게 함
+        versionCode Integer.parseInt(System.getenv("RUNHIGH_VERSION_CODE") ?: "1")
+        versionName System.getenv("RUNHIGH_VERSION_NAME") ?: "1.0.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        aaptOptions {
+             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
+             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
+            ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+        }
+    }
+    signingConfigs {
+        // 저장소에 포함한 공용 디버그 키: CI에서 만든 디버그 APK끼리 서명이 같아 업데이트 설치가 됨
+        debug {
+            storeFile file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+        // 출시용 키는 환경 변수로만 받음 (저장소에 넣지 않음)
+        if (System.getenv("RUNHIGH_KEYSTORE")) {
+            release {
+                storeFile file(System.getenv("RUNHIGH_KEYSTORE"))
+                storePassword System.getenv("RUNHIGH_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("RUNHIGH_KEY_ALIAS")
+                keyPassword System.getenv("RUNHIGH_KEY_PASSWORD")
+            }
+        }
+    }
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            if (System.getenv("RUNHIGH_KEYSTORE")) {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+}
+
+repositories {
+    flatDir{
+        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
+    implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
+    implementation project(':capacitor-android')
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+    implementation project(':capacitor-cordova-android-plugins')
+}
+
+apply from: 'capacitor.build.gradle'
+
+try {
+    def servicesJSON = file('google-services.json')
+    if (servicesJSON.text) {
+        apply plugin: 'com.google.gms.google-services'
+    }
+} catch(Exception e) {
+    logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
+}

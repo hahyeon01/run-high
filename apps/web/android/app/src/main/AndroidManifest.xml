@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <activity
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation|density"
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBarLaunch"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+        <!-- 헬스 커넥트: 권한 화면에서 '개인정보 처리방침'을 누르면 보여 줄 화면 (Android 13 이하) -->
+        <activity
+            android:name="com.fit_up.health.capacitor.PermissionsRationaleActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+            </intent-filter>
+        </activity>
+
+        <!-- 헬스 커넥트: Android 14 이상 -->
+        <activity-alias
+            android:name="ViewPermissionUsageActivity"
+            android:exported="true"
+            android:targetActivity="com.fit_up.health.capacitor.PermissionsRationaleActivity"
+            android:permission="android.permission.START_VIEW_PERMISSION_USAGE">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW_PERMISSION_USAGE" />
+                <category android:name="android.intent.category.HEALTH_PERMISSIONS" />
+            </intent-filter>
+        </activity-alias>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
+    </application>
+
+    <queries>
+        <!-- 헬스 커넥트 설치 여부 확인 -->
+        <package android:name="com.google.android.apps.healthdata" />
+    </queries>
+
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- GPS 러닝 측정 (앱을 켜 둔 동안만) -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-feature android:name="android.hardware.location.gps" android:required="false" />
+
+    <!-- 헬스 커넥트: 러닝 운동·거리·경로만 읽음. 플러그인이 선언한 나머지 건강 권한은 빼서 동의 화면에 나오지 않게 함 -->
+    <uses-permission android:name="android.permission.health.READ_EXERCISE" />
+    <uses-permission android:name="android.permission.health.READ_DISTANCE" />
+    <uses-permission android:name="android.permission.health.READ_EXERCISE_ROUTE" />
+    <uses-permission android:name="android.permission.health.READ_STEPS" tools:node="remove" />
+    <uses-permission android:name="android.permission.health.READ_ACTIVE_CALORIES_BURNED" tools:node="remove" />
+    <uses-permission android:name="android.permission.health.READ_TOTAL_CALORIES_BURNED" tools:node="remove" />
+    <uses-permission android:name="android.permission.health.READ_FLOORS_CLIMBED" tools:node="remove" />
+    <uses-permission android:name="android.permission.health.READ_HEART_RATE" tools:node="remove" />
+    <uses-permission android:name="android.permission.health.READ_WEIGHT" tools:node="remove" />
+    <uses-permission android:name="android.permission.health.READ_HEIGHT" tools:node="remove" />
+    <uses-permission android:name="android.permission.health.READ_BODY_FAT" tools:node="remove" />
+    <uses-permission android:name="android.permission.health.READ_LEAN_BODY_MASS" tools:node="remove" />
+    <uses-permission android:name="android.permission.health.READ_NUTRITION" tools:node="remove" />
+</manifest>

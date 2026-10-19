@@ -1,0 +1,266 @@
+@import 'tailwindcss';
+
+/* 다크 모드: html[data-theme="dark"] 또는 시스템 설정 */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/*
+ * 디자인 토큰 — Figma "BrainByte" 레퍼런스의 보라(#6D57FC)·남색 히어로·라벤더 트랙을 러닝 앱에 맞게 정리
+ */
+:root {
+  --bg: #f7f6fd;
+  --surface: #ffffff;
+  --surface-2: #f3f1fc;
+  --line: #ebe8f6;
+  --ink: #17142e;
+  --ink-2: #4a4763;
+  --muted: #6b6886;
+  --brand: #6d57fc;
+  --brand-strong: #5b45f0;
+  --brand-deep: #5040b8;
+  --brand-tint: #f0eeff;
+  --brand-tint-2: #e4dfff;
+  --on-brand: #ffffff;
+  --navy: #1e234b;
+  --navy-2: #2c3270;
+  --butter: #ffd281;
+  --butter-tint: #fff4dd;
+  --peach: #ffb98f;
+  --peach-tint: #ffefe5;
+  --mint: #7fdcb6;
+  --mint-tint: #e4f7ef;
+  --sky: #8fb6ff;
+  --sky-tint: #e8f0ff;
+  --rose: #ff8fb1;
+  --rose-tint: #ffeaf1;
+  --amber: #ffa606;
+  --ok: #0f9d74;
+  /* 연한 바탕 위 글자용 (WCAG AA 4.5:1) */
+  --ok-ink: #0c7a59;
+  --ok-tint: #e2f6ef;
+  --warn: #c08400;
+  --warn-ink: #946300;
+  --warn-tint: #fff2dc;
+  --bad: #db2f55;
+  --bad-ink: #c4244a;
+  --bad-tint: #fdebec;
+  --chart-muted: #8f8ba8;
+  --shadow-color: 46 35 120;
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg: #0f1124;
+  --surface: #181b35;
+  --surface-2: #20244a;
+  --line: #2b2f57;
+  --ink: #f3f2fb;
+  --ink-2: #c6c4dc;
+  --muted: #8f8dab;
+  --brand: #8d7bff;
+  --brand-strong: #a091ff;
+  --brand-deep: #6d57fc;
+  --brand-tint: #252052;
+  --brand-tint-2: #322b6b;
+  --on-brand: #14102e;
+  --navy: #0a0c1d;
+  --navy-2: #1b1f45;
+  --butter-tint: #3a3020;
+  --peach-tint: #3b2a22;
+  --mint-tint: #183429;
+  --sky-tint: #1d2a47;
+  --rose-tint: #3b2131;
+  --ok: #3dd39f;
+  --ok-ink: #3dd39f;
+  --ok-tint: #153328;
+  --warn: #ffb547;
+  --warn-ink: #ffb547;
+  --warn-tint: #3a2c14;
+  --bad: #ff6b72;
+  --bad-ink: #ff6b72;
+  --bad-tint: #3c1d23;
+  --chart-muted: #77748f;
+  --shadow-color: 0 0 0;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #0f1124;
+    --surface: #181b35;
+    --surface-2: #20244a;
+    --line: #2b2f57;
+    --ink: #f3f2fb;
+    --ink-2: #c6c4dc;
+    --muted: #8f8dab;
+    --brand: #8d7bff;
+    --brand-strong: #a091ff;
+    --brand-deep: #6d57fc;
+    --brand-tint: #252052;
+    --brand-tint-2: #322b6b;
+    --navy: #0a0c1d;
+    --navy-2: #1b1f45;
+    --butter-tint: #3a3020;
+    --peach-tint: #3b2a22;
+    --mint-tint: #183429;
+    --sky-tint: #1d2a47;
+    --rose-tint: #3b2131;
+    --ok: #3dd39f;
+    --ok-ink: #3dd39f;
+    --ok-tint: #153328;
+    --warn: #ffb547;
+    --warn-ink: #ffb547;
+    --warn-tint: #3a2c14;
+    --bad: #ff6b72;
+    --bad-ink: #ff6b72;
+    --bad-tint: #3c1d23;
+    --chart-muted: #77748f;
+    --shadow-color: 0 0 0;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-tint: var(--brand-tint);
+  --color-brand-tint-2: var(--brand-tint-2);
+  --color-on-brand: var(--on-brand);
+  --color-navy: var(--navy);
+  --color-navy-2: var(--navy-2);
+  --color-butter: var(--butter);
+  --color-butter-tint: var(--butter-tint);
+  --color-peach: var(--peach);
+  --color-peach-tint: var(--peach-tint);
+  --color-mint: var(--mint);
+  --color-mint-tint: var(--mint-tint);
+  --color-sky: var(--sky);
+  --color-sky-tint: var(--sky-tint);
+  --color-rose: var(--rose);
+  --color-rose-tint: var(--rose-tint);
+  --color-amber: var(--amber);
+  --color-ok: var(--ok);
+  --color-ok-ink: var(--ok-ink);
+  --color-ok-tint: var(--ok-tint);
+  --color-warn: var(--warn);
+  --color-warn-ink: var(--warn-ink);
+  --color-warn-tint: var(--warn-tint);
+  --color-bad: var(--bad);
+  --color-bad-ink: var(--bad-ink);
+  --color-bad-tint: var(--bad-tint);
+  --color-chart-muted: var(--chart-muted);
+
+  --font-sans: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, system-ui, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  --font-display: 'Urbanist Variable', 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+
+  --shadow-card: 0 12px 32px -18px rgb(var(--shadow-color) / 0.28), 0 2px 6px -2px rgb(var(--shadow-color) / 0.06);
+  --shadow-float: 0 18px 44px -16px rgb(var(--shadow-color) / 0.35);
+  --radius-card: 1.75rem;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100dvh;
+  }
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  button,
+  [role='button'] {
+    cursor: pointer;
+  }
+  input,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+  img {
+    max-width: 100%;
+  }
+}
+
+@layer utilities {
+  .font-num {
+    font-family: var(--font-display);
+    letter-spacing: -0.015em;
+  }
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+}
+
+@keyframes sheet-up {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.anim-sheet {
+  animation: sheet-up 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.anim-fade {
+  animation: fade-in 160ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-sheet,
+  .anim-fade {
+    animation: none;
+  }
+  * {
+    scroll-behavior: auto !important;
+  }
+}
