@@ -15,13 +15,16 @@ export default defineConfig({
     rolldownOptions: {
       output: {
         // 자주 바뀌지 않는 라이브러리는 따로 묶어 캐시 효율을 높임
-        advancedChunks: {
+        codeSplitting: {
           groups: [
             { name: 'react', test: /node_modules[\\/](react|react-dom|scheduler|react-router|@tanstack|zustand)[\\/]/ },
             { name: 'icons', test: /node_modules[\\/]react-iconly[\\/]/ },
-            { name: 'sqljs', test: /node_modules[\\/]sql\.js[\\/]/ },
+            // asm.js 빌드(WebAssembly 대체용)는 필요할 때만 받도록 묶지 않음
+            { name: 'sqljs', test: /node_modules[\\/]sql\.js[\\/]dist[\\/]sql-wasm/ },
             { name: 'core', test: /(packages[\\/]core[\\/]src|node_modules[\\/](zod|@noble)[\\/])/ },
-            { name: 'capacitor', test: /node_modules[\\/](@capacitor|capacitor-health)[\\/]/ },
+            // 플러그인의 웹 구현(web.js)은 모듈을 읽는 순간 실행되는 코드가 있어(예: 위치 플러그인의 방향 센서 구독)
+            // 한 덩어리로 묶지 않고 필요할 때만 불러오도록 core만 묶음
+            { name: 'capacitor', test: /node_modules[\\/]@capacitor[\\/]core[\\/]/ },
           ],
         },
       },

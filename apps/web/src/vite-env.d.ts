@@ -9,6 +9,12 @@ interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
 
+declare module 'sql.js/dist/sql-asm.js' {
+  import type initSqlJs from 'sql.js';
+  const init: typeof initSqlJs;
+  export default init;
+}
+
 declare module '*.wasm?url' {
   const url: string;
   export default url;

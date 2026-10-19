@@ -23,6 +23,34 @@ import { readStorage, writeStorage } from './storage.ts';
 
 const USER_KEY = 'runhigh.local.userId';
 
+type SqlJs = Awaited<ReturnType<typeof initSqlJs>>;
+
+/**
+ * 기본은 WebAssembly 빌드. WebAssembly가 막힌 환경(엄격한 CSP로 호스팅된 페이지,
+ * iOS 잠금 모드 등)에서는 순수 JS(asm.js) 빌드를 그때만 내려받아 실행
+ */
+async function loadSqlJs(): Promise<SqlJs> {
+  if (wasmAllowed()) {
+    try {
+      return await initSqlJs({ locateFile: () => wasmUrl });
+    } catch (e) {
+      console.warn('[runhigh] WebAssembly를 쓸 수 없어 asm.js 빌드로 실행해요', e);
+    }
+  }
+  const mod = await import('sql.js/dist/sql-asm.js');
+  return mod.default();
+}
+
+/** 빈 WebAssembly 모듈(8바이트)을 컴파일해 보고 막혀 있으면 큰 .wasm 파일을 받지 않음 */
+function wasmAllowed(): boolean {
+  try {
+    new WebAssembly.Module(Uint8Array.of(0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 interface Runtime {
   deps: Deps;
   flush: () => Promise<void>;
@@ -40,7 +68,7 @@ export class LocalApi implements ApiClient {
   }
 
   private async init(): Promise<Runtime> {
-    const SQL = await initSqlJs({ locateFile: () => wasmUrl });
+    const SQL = await loadSqlJs();
     const saved = await loadDbBytes();
     const raw = saved ? new SQL.Database(saved) : new SQL.Database();
     let timer: ReturnType<typeof setTimeout> | null = null;
