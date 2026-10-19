@@ -21,6 +21,9 @@ export function getThemePref(): ThemePref {
 
 export function resolvedTheme(pref = getThemePref()): 'light' | 'dark' {
   if (pref !== 'system') return pref;
+  // 앱을 감싼 페이지가 테마를 정해 두었으면(html[data-host-theme]) 그것을 시스템 설정으로 봄
+  const host = typeof document !== 'undefined' ? document.documentElement.dataset.hostTheme : undefined;
+  if (host === 'light' || host === 'dark') return host;
   return mq?.matches ? 'dark' : 'light';
 }
 
