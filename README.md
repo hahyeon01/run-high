@@ -56,6 +56,7 @@ packages/core   도메인 로직 + 서비스 계층 (서버·브라우저·Andro
 apps/server     Fastify API 서버 (SQLite: better-sqlite3, JWT, 이미지 업로드, 1분 주기 예약 작업)
 apps/web        React 웹 앱 + Capacitor Android 앱
                 데모 모드: core를 브라우저 안 SQLite(sql.js)로 실행 / 서버 모드: HTTP로 API 호출
+patches         외부 패키지 수정본 (patch-package, 설치 때 자동 적용)
 ```
 
 같은 서비스 코드가 서버(better-sqlite3)와 기기 안(sql.js)에서 그대로 돌아서, APK 하나로도 모든 흐름을 확인할 수 있습니다.
@@ -99,6 +100,8 @@ cd android && ./gradlew assembleDebug        # 또는 npx cap open android (Andr
 - 최소 Android 8.0 (API 26), JDK 21, Android SDK 36.
 - 권한: 위치(GPS 측정 중에만), 알림(접수 오픈·번개 리마인더 예약 알림), 헬스 커넥트(러닝 운동·거리·경로만 읽기).
 - Android 14부터 ‘알람 및 리마인더’ 권한이 기본으로 꺼져 있어 예약 알림이 몇 분 늦을 수 있어요. 대회 알림을 켜면 앱이 이 권한을 허용하는 화면으로 안내해요.
+- 헬스 커넥트 플러그인(capacitor-health)이 경로 읽기 권한 이름을 단수형으로 잘못 쓰고 있어 `patches/`에서 `READ_EXERCISE_ROUTES`로 고쳐요. `npm install` 때 자동으로 적용돼요.
+- 헬스 커넥트는 다른 앱이 저장한 기록을 ‘처음 권한을 허용한 날 기준 30일 전’까지만 읽게 해요. 그보다 오래된 기록은 GPX 파일로 가져와 주세요.
 - `apps/web/android/app/debug.keystore`는 공용 디버그 키예요. CI가 만든 APK끼리 서명이 같아 덮어 설치가 됩니다. 출시용 서명은 `RUNHIGH_KEYSTORE`, `RUNHIGH_KEYSTORE_PASSWORD`, `RUNHIGH_KEY_ALIAS`, `RUNHIGH_KEY_PASSWORD` 환경 변수로 넣어 `assembleRelease` 하세요.
 - 앱 안 **설정 → 연결**에서 서버 주소를 넣으면 서버 모드로 바뀝니다.
 

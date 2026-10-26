@@ -1,0 +1,35 @@
+diff --git a/node_modules/capacitor-health/android/src/main/AndroidManifest.xml b/node_modules/capacitor-health/android/src/main/AndroidManifest.xml
+index 456df5e..b4b72ac 100644
+--- a/node_modules/capacitor-health/android/src/main/AndroidManifest.xml
++++ b/node_modules/capacitor-health/android/src/main/AndroidManifest.xml
+@@ -6,7 +6,7 @@
+     <uses-permission android:name="android.permission.health.READ_TOTAL_CALORIES_BURNED"/>
+     <uses-permission android:name="android.permission.health.READ_FLOORS_CLIMBED"/>
+     <uses-permission android:name="android.permission.health.READ_HEART_RATE"/>
+-    <uses-permission android:name="android.permission.health.READ_EXERCISE_ROUTE"/>
++    <uses-permission android:name="android.permission.health.READ_EXERCISE_ROUTES"/>
+     <uses-permission android:name="android.permission.health.READ_WEIGHT"/>
+     <uses-permission android:name="android.permission.health.READ_HEIGHT"/>
+     <uses-permission android:name="android.permission.health.READ_BODY_FAT"/>
+diff --git a/node_modules/capacitor-health/android/src/main/java/com/fit_up/health/capacitor/HealthPlugin.kt b/node_modules/capacitor-health/android/src/main/java/com/fit_up/health/capacitor/HealthPlugin.kt
+index 5a0350f..12475d8 100644
+--- a/node_modules/capacitor-health/android/src/main/java/com/fit_up/health/capacitor/HealthPlugin.kt
++++ b/node_modules/capacitor-health/android/src/main/java/com/fit_up/health/capacitor/HealthPlugin.kt
+@@ -98,7 +98,7 @@ enum class CapHealthPermission {
+         ),
+         Permission(
+             alias = "READ_ROUTE",
+-            strings = ["android.permission.health.READ_EXERCISE_ROUTE"]
++            strings = ["android.permission.health.READ_EXERCISE_ROUTES"]
+         ),
+         Permission(
+             alias = "READ_WEIGHT",
+@@ -170,7 +170,7 @@ class HealthPlugin : Plugin() {
+ 
+     private val permissionMapping = mapOf(
+         Pair(CapHealthPermission.READ_WORKOUTS, "android.permission.health.READ_EXERCISE"),
+-        Pair(CapHealthPermission.READ_ROUTE, "android.permission.health.READ_EXERCISE_ROUTE"),
++        Pair(CapHealthPermission.READ_ROUTE, "android.permission.health.READ_EXERCISE_ROUTES"),
+         Pair(CapHealthPermission.READ_HEART_RATE, "android.permission.health.READ_HEART_RATE"),
+         Pair(CapHealthPermission.READ_ACTIVE_CALORIES, "android.permission.health.READ_ACTIVE_CALORIES_BURNED"),
+         Pair(CapHealthPermission.READ_TOTAL_CALORIES, "android.permission.health.READ_TOTAL_CALORIES_BURNED"),

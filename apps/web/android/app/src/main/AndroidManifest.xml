@@ -74,7 +74,8 @@
     <!-- 헬스 커넥트: 러닝 운동·거리·경로만 읽음. 플러그인이 선언한 나머지 건강 권한은 빼서 동의 화면에 나오지 않게 함 -->
     <uses-permission android:name="android.permission.health.READ_EXERCISE" />
     <uses-permission android:name="android.permission.health.READ_DISTANCE" />
-    <uses-permission android:name="android.permission.health.READ_EXERCISE_ROUTE" />
+    <!-- 경로 읽기 권한은 복수형(READ_EXERCISE_ROUTES)이 맞음. 플러그인의 단수형 오타는 patches/에서 고침 -->
+    <uses-permission android:name="android.permission.health.READ_EXERCISE_ROUTES" />
     <uses-permission android:name="android.permission.health.READ_STEPS" tools:node="remove" />
     <uses-permission android:name="android.permission.health.READ_ACTIVE_CALORIES_BURNED" tools:node="remove" />
     <uses-permission android:name="android.permission.health.READ_TOTAL_CALORIES_BURNED" tools:node="remove" />

@@ -5,6 +5,7 @@ COPY package.json package-lock.json ./
 COPY packages/core/package.json packages/core/
 COPY apps/server/package.json apps/server/
 COPY apps/web/package.json apps/web/
+COPY patches ./patches
 RUN npm ci
 COPY . .
 # 서버 모드 웹 빌드 (같은 출처의 /api 사용)

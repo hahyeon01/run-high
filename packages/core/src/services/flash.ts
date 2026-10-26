@@ -834,7 +834,8 @@ export const flashMethods = {
       const mine = parts.find((p) => p.user_id === ctx.userId);
       const target = parts.find((p) => p.user_id === input.revieweeId);
       if (!mine || mine.status !== 'attended') throw forbidden('함께 달린 러너만 후기를 남길 수 있어요');
-      if (!target || !['attended', 'no_show'].includes(target.status)) throw invalid('함께 달린 러너가 아니에요');
+      // 출석 체크에서 '참석'으로 기록된 러너끼리만 (노쇼는 이미 신뢰 점수에 반영되므로 후기 대상이 아님)
+      if (!target || target.status !== 'attended') throw invalid('함께 달린 러너에게만 후기를 남길 수 있어요');
       db.run(
         `INSERT INTO manner_reviews (id, flash_run_id, reviewer_id, reviewee_id, positive, negative, created_at)
          VALUES (?, ?, ?, ?, ?, ?, ?)

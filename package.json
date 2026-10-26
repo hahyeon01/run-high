@@ -13,6 +13,7 @@
     "node": ">=22.12"
   },
   "scripts": {
+    "postinstall": "patch-package",
     "dev": "npm run dev -w @runhigh/web",
     "dev:server": "npm run dev -w @runhigh/server",
     "dev:full": "npm run dev:full -w @runhigh/web",
@@ -25,5 +26,8 @@
     "e2e": "npm run e2e -w @runhigh/web",
     "android:sync": "npm run cap:sync -w @runhigh/web",
     "android:open": "npm run cap:open -w @runhigh/web"
+  },
+  "devDependencies": {
+    "patch-package": "^8.0.1"
   }
 }

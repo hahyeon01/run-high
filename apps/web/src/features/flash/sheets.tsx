@@ -246,7 +246,8 @@ export function AttendanceSheet({ open, onClose, run }: { open: boolean; onClose
 
 export function ReviewSheet({ open, onClose, run }: { open: boolean; onClose: () => void; run: FlashRunDetail }) {
   const me = useMe();
-  const targets = run.participants.filter((p) => p.user.id !== me.id && (p.status === 'attended' || p.status === 'no_show' || p.role === 'host') && !p.reviewedByMe);
+  // 출석 체크에서 '참석'으로 기록된 러너만 (노쇼는 후기 대상이 아님)
+  const targets = run.participants.filter((p) => p.user.id !== me.id && p.status === 'attended' && !p.reviewedByMe);
   const [index, setIndex] = useState(0);
   const [pos, setPos] = useState<string[]>([]);
   const [neg, setNeg] = useState<string[]>([]);

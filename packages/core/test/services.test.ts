@@ -296,7 +296,14 @@ describe('flash runs (번개)', () => {
     expect(detail.permissions.canReview).toBe(true);
 
     await env.call(U('breeze'), 'flash.review', { id: F('f9'), revieweeId: U('demo'), positive: ['러닝 매너가 좋아요'] });
+    await env.call(U('demo'), 'flash.review', { id: F('f9'), revieweeId: U('breeze'), positive: ['페이스를 잘 맞춰줘요'] });
+    // 노쇼한 사람은 함께 달리지 않았으니 후기를 남길 수도, 받을 수도 없음
     await expectAppError(env.call(U('minji'), 'flash.review', { id: F('f9'), revieweeId: U('demo'), positive: ['러닝 매너가 좋아요'] }), 'FORBIDDEN');
+    await expectAppError(env.call(U('breeze'), 'flash.review', { id: F('f9'), revieweeId: U('minji'), negative: ['약속 시간에 늦었어요'] }), 'VALIDATION');
+    // 나 자신, 이 번개에 없던 사람
+    await expectAppError(env.call(U('breeze'), 'flash.review', { id: F('f9'), revieweeId: U('breeze'), positive: ['러닝 매너가 좋아요'] }), 'VALIDATION');
+    await expectAppError(env.call(U('breeze'), 'flash.review', { id: F('f9'), revieweeId: U('pacer'), positive: ['러닝 매너가 좋아요'] }), 'VALIDATION');
+    await expectAppError(env.call(U('pacer'), 'flash.review', { id: F('f9'), revieweeId: U('demo'), positive: ['러닝 매너가 좋아요'] }), 'FORBIDDEN');
     const after = (await env.call(U('demo'), 'users.trust', { userId: U('minji') })).score;
     expect(after).toBeLessThan(before);
   });

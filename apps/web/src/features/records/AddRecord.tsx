@@ -81,6 +81,7 @@ export default function AddRecord() {
   const [imported, setImported] = useState<RunDto | null>(null);
   const [reading, setReading] = useState(false);
   const [health, setHealth] = useState<{ imported: number; skipped: number; notes: string[] } | null>(null);
+  const [healthLimited, setHealthLimited] = useState(false);
   const [healthError, setHealthError] = useState<string | null>(null);
   const [healthBusy, setHealthBusy] = useState(false);
   const [manualOpen, setManualOpen] = useState(false);
@@ -120,6 +121,7 @@ export default function AddRecord() {
   const syncHealth = async () => {
     setHealthError(null);
     setHealth(null);
+    setHealthLimited(false);
     setHealthBusy(true);
     try {
       const r = await readHealthWorkouts(60);
@@ -127,6 +129,7 @@ export default function AddRecord() {
         setHealthError(r.message);
         return;
       }
+      setHealthLimited(r.limitedTo30Days);
       if (r.workouts.length === 0) {
         setHealth({ imported: 0, skipped: 0, notes: [] });
         return;
@@ -196,7 +199,7 @@ export default function AddRecord() {
           tone="mint"
           title="헬스 커넥트에서 가져오기"
           verified
-          description="삼성 헬스·갤럭시 워치·Fitbit 등이 헬스 커넥트에 저장한 최근 60일 러닝을 한 번에 가져와요."
+          description="삼성 헬스·갤럭시 워치·Fitbit 등이 헬스 커넥트에 저장한 최근 60일 러닝을 한 번에 가져와요. 처음 연결할 때는 헬스 커넥트 정책상 권한을 허용한 날 기준 30일 전 기록부터 읽을 수 있어요."
         >
           {healthSupported ? (
             <>
@@ -212,6 +215,7 @@ export default function AddRecord() {
               {health && (
                 <p className="mt-3 rounded-2xl bg-surface-2 px-4 py-3 text-[14px] text-ink-2">
                   새 기록 {health.imported}개 · 중복·러닝 아님 {health.skipped}개
+                  {healthLimited && <span className="mt-1 block text-[13px] text-muted">헬스 커넥트가 더 오래된 기록을 막아서 최근 30일만 가져왔어요.</span>}
                   {health.notes.length > 0 && <span className="mt-1 block text-[13px] text-muted">참고용 처리: {health.notes.join(', ')}</span>}
                 </p>
               )}
