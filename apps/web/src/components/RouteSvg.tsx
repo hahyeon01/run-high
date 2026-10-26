@@ -27,8 +27,18 @@ export function RouteSvg({ route, className, strokeWidth = 3, live }: { route: L
   return (
     <svg viewBox={`0 0 ${size} ${size}`} className={cn('bg-brand-tint', className)} preserveAspectRatio="xMidYMid meet" role="img" aria-label="달린 경로">
       <path d={d} fill="none" stroke="var(--brand)" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx={sx} cy={sy} r={5} fill="var(--ok)" stroke="var(--surface)" strokeWidth={2} />
-      <circle cx={ex} cy={ey} r={5} fill={live ? 'var(--bad)' : 'var(--navy)'} stroke="var(--surface)" strokeWidth={2} />
+      {live ? (
+        <>
+          <circle cx={sx} cy={sy} r={5} fill="var(--ok)" stroke="var(--surface)" strokeWidth={2} />
+          <circle cx={ex} cy={ey} r={5} fill="var(--bad)" stroke="var(--surface)" strokeWidth={2} />
+        </>
+      ) : (
+        <>
+          {/* 도착은 고리, 출발은 점: 되돌아오는 코스에서 겹쳐도 둘 다 보임 */}
+          <circle cx={ex} cy={ey} r={6.5} fill="var(--surface)" stroke="var(--ink)" strokeWidth={2.5} />
+          <circle cx={sx} cy={sy} r={3.6} fill="var(--ok)" stroke="var(--surface)" strokeWidth={1} />
+        </>
+      )}
     </svg>
   );
 }

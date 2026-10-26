@@ -7,8 +7,9 @@ import { Button, IconButton } from '../../components/Button.tsx';
 import { Card } from '../../components/Card.tsx';
 import { Field, Input, Textarea } from '../../components/Field.tsx';
 import { Page, TopBar } from '../../components/Header.tsx';
+import { Icon } from '../../components/Icon.tsx';
 import { Callout, ErrorState, Skeleton } from '../../components/Misc.tsx';
-import { RouteSvg } from '../../components/RouteSvg.tsx';
+import { CourseLegend, CourseMap } from '../../components/CourseMap.tsx';
 import { ConfirmDialog, MenuItem, Sheet } from '../../components/Sheet.tsx';
 import { formatDateTime, formatDuration, formatPace, km } from '../../lib/format.ts';
 
@@ -51,9 +52,20 @@ export default function RecordDetail() {
           <div className="space-y-5">
             <Card className="overflow-hidden">
               {run.route && run.route.length > 1 ? (
-                <RouteSvg route={run.route} className="aspect-[4/3] w-full sm:aspect-[16/9]" strokeWidth={2.5} />
+                <CourseMap route={run.route} className="aspect-[4/3] w-full sm:aspect-[16/9]" />
               ) : (
-                <div className="flex aspect-[16/9] w-full items-center justify-center bg-brand-tint text-[14px] text-muted">경로 정보가 없는 기록이에요</div>
+                <div className="flex aspect-[16/9] w-full items-center justify-center bg-brand-tint px-6 text-center text-[14px] text-muted">
+                  {run.routePrivacy === 'hidden' ? '짧은 기록이라 개인정보 보호를 위해 경로를 숨겼어요' : '경로 정보가 없는 기록이에요'}
+                </div>
+              )}
+              {run.route && run.route.length > 1 && (
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 border-b border-line px-5 py-2.5 text-[12.5px] text-muted">
+                  <CourseLegend />
+                  <span className="flex items-center gap-1.5">
+                    <Icon name="lock" size={14} />
+                    {mine ? '다른 러너에게는 출발·도착 근처 200m를 가리고 보여 줘요' : '개인정보 보호를 위해 출발·도착 근처 200m는 가려져 있어요'}
+                  </span>
+                </div>
               )}
               <div className="p-5">
                 <div className="text-[13px] text-muted">{formatDateTime(run.startedAt)}</div>

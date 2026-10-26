@@ -60,7 +60,7 @@ export const userMethods = {
     const recentRuns = canSeeRecords
       ? db
           .all<RunRow>('SELECT * FROM runs WHERE user_id = ? ORDER BY started_at DESC LIMIT 5', [userId])
-          .map(toRunDto)
+          .map((r) => toRunDto(r, ctx.userId))
       : [];
 
     const tagCounts = new Map<string, number>();

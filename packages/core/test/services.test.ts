@@ -270,6 +270,20 @@ describe('flash runs (번개)', () => {
     expect(matched.map((m) => m.user_id)).not.toContain(U('demo'));
   });
 
+  it('hides the start and end of a route from other runners', async () => {
+    const env = await createEnv();
+    const mine = await env.call(U('pacer'), 'runs.list', {});
+    const run = mine.items.find((r) => r.route && r.route.length > 10)!;
+    expect(run.routePrivacy).toBe('full');
+    const other = await env.call(U('demo'), 'runs.get', { id: run.id });
+    expect(other.routePrivacy).toBe('trimmed');
+    expect(other.route![0]).not.toEqual(run.route![0]);
+    expect(other.route!.at(-1)).not.toEqual(run.route!.at(-1));
+    expect(other.distanceM).toBe(run.distanceM);
+    const own = await env.call(U('pacer'), 'runs.get', { id: run.id });
+    expect(own.route).toEqual(run.route);
+  });
+
   it('completes with attendance, records no-shows and accepts reviews', async () => {
     const env = await createEnv();
     // f9: 호스트 한강러너, 확정 한강바람, 대기 초보러너민지

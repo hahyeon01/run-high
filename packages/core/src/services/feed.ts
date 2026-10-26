@@ -63,7 +63,7 @@ function toPostDto(ctx: UserCtx, row: PostRow): PostDto {
   return {
     id: row.id,
     author: userCard(ctx, row.user_id),
-    run: run ? toRunDto(run) : null,
+    run: run ? toRunDto(run, ctx.userId) : null,
     body: row.body,
     photos: parseJson<string[]>(row.photos, []),
     scope: row.scope,

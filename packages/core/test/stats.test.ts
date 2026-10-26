@@ -10,7 +10,7 @@ import {
 import { computeLevel, predictPaceAt, type RunSample } from '../src/stats/level.ts';
 import { assessTarget } from '../src/stats/eligibility.ts';
 import { computeTrust } from '../src/stats/trust.ts';
-import { summarizeTrack } from '../src/stats/geo.ts';
+import { haversineM, hideRouteEnds, summarizeTrack, type LatLng } from '../src/stats/geo.ts';
 
 const NOW = new Date('2026-10-15T09:00:00Z');
 const day = (n: number) => new Date(NOW.getTime() - n * 86_400_000).toISOString();
@@ -181,5 +181,31 @@ describe('summarizeTrack (GPS 궤적)', () => {
     expect(s.distanceM).toBeGreaterThan(single * 2 - 5);
     expect(s.distanceM).toBeLessThan(single * 2 + 5);
     expect(s.movingS).toBe(29 * 4 * 2);
+  });
+});
+
+describe('hideRouteEnds (다른 러너에게 보여 줄 경로)', () => {
+  const at = (p: LatLng) => ({ lat: p[0], lng: p[1] });
+  // 북쪽으로 약 2km 직선 (100m 간격 21점)
+  const line: LatLng[] = Array.from({ length: 21 }, (_, i) => [37.5 + (i * 100) / 111_195, 127]);
+
+  it('출발·도착에서 각각 200m를 지움', () => {
+    const out = hideRouteEnds(line)!;
+    expect(haversineM(at(line[0]), at(out[0]))).toBeGreaterThanOrEqual(199);
+    expect(haversineM(at(line[0]), at(out[0]))).toBeLessThan(205);
+    expect(haversineM(at(line.at(-1)!), at(out.at(-1)!))).toBeGreaterThanOrEqual(199);
+    expect(haversineM(at(line.at(-1)!), at(out.at(-1)!))).toBeLessThan(205);
+  });
+
+  it('점 사이가 멀어도 정확히 200m 지점에서 자름', () => {
+    const sparse: LatLng[] = [line[0], line[10], line[20]];
+    const out = hideRouteEnds(sparse)!;
+    expect(out).toHaveLength(3);
+    expect(Math.round(haversineM(at(sparse[0]), at(out[0])))).toBe(200);
+  });
+
+  it('가리고 나면 남는 게 거의 없는 짧은 경로는 통째로 숨김', () => {
+    expect(hideRouteEnds(line.slice(0, 7))).toBeNull(); // 600m
+    expect(hideRouteEnds([line[0]])).toBeNull();
   });
 });

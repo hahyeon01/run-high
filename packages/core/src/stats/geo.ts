@@ -112,6 +112,36 @@ export function simplifyRoute(route: LatLng[], maxPoints = 400, toleranceM = 4):
   return out.map(roundLatLng);
 }
 
+/** 다른 러너에게 경로를 보여 줄 때 출발·도착 근처를 가리는 거리 */
+export const ROUTE_PRIVACY_M = 200;
+
+/**
+ * 출발·도착 지점에서 각각 `meters`만큼을 지운 경로. 집이나 직장 위치가 지도에 드러나지 않게 함.
+ * 가리고 나면 남는 구간이 너무 짧으면 null (경로 전체를 숨김)
+ */
+export function hideRouteEnds(route: LatLng[], meters = ROUTE_PRIVACY_M): LatLng[] | null {
+  if (route.length < 2) return null;
+  const at = (p: LatLng) => ({ lat: p[0], lng: p[1] });
+  const cum = [0];
+  for (let i = 1; i < route.length; i++) cum.push(cum[i - 1] + haversineM(at(route[i - 1]), at(route[i])));
+  const total = cum[cum.length - 1];
+  if (total < meters * 2 + 300) return null;
+  // 누적 거리가 d인 지점(두 점 사이는 직선으로 보간)
+  const pointAt = (d: number): { index: number; point: LatLng } => {
+    let i = 1;
+    while (i < cum.length - 1 && cum[i] < d) i++;
+    const seg = cum[i] - cum[i - 1] || 1;
+    const t = Math.min(1, Math.max(0, (d - cum[i - 1]) / seg));
+    const [aLat, aLng] = route[i - 1];
+    const [bLat, bLng] = route[i];
+    return { index: i, point: roundLatLng([aLat + (bLat - aLat) * t, aLng + (bLng - aLng) * t]) };
+  };
+  const start = pointAt(meters);
+  const end = pointAt(total - meters);
+  const middle = route.slice(start.index, end.index);
+  return [start.point, ...middle, end.point];
+}
+
 function roundLatLng([lat, lng]: LatLng): LatLng {
   return [Math.round(lat * 1e5) / 1e5, Math.round(lng * 1e5) / 1e5];
 }

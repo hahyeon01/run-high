@@ -62,7 +62,7 @@ function insertRun(
       nowIso(ctx),
     ],
   );
-  return toRunDto(ctx.deps.db.get<RunRow>('SELECT * FROM runs WHERE id = ?', [id])!);
+  return toRunDto(ctx.deps.db.get<RunRow>('SELECT * FROM runs WHERE id = ?', [id])!, ctx.userId);
 }
 
 /** 같은 시각(±2분)·비슷한 거리(±3%)의 기록이 이미 있으면 중복으로 봄 */
@@ -121,7 +121,7 @@ export const runMethods = {
          ORDER BY started_at DESC LIMIT ?`,
         [userId, input.cursor ?? null, input.cursor ?? null, limit + 1],
       );
-      const items = rows.slice(0, limit).map(toRunDto);
+      const items = rows.slice(0, limit).map((r) => toRunDto(r, ctx.userId));
       return { items, nextCursor: rows.length > limit ? items.at(-1)!.startedAt : null };
     },
   ),
@@ -136,7 +136,7 @@ export const runMethods = {
       if (!linkedToPost && privacy.records === 'private') throw forbidden('비공개 기록이에요');
       if (isBlockedEither(ctx.deps.db, ctx.userId, row.user_id)) throw forbidden('볼 수 없는 기록이에요');
     }
-    return toRunDto(row);
+    return toRunDto(row, ctx.userId);
   }),
 
   /** 직접 입력: 참고용 기록 (번개 자격 판정에는 쓰지 않음) */
@@ -283,7 +283,7 @@ export const runMethods = {
       if (!row) throw notFound('기록');
       if (row.user_id !== ctx.userId) throw forbidden();
       ctx.deps.db.run('UPDATE runs SET title = ?, note = ? WHERE id = ?', [input.title ?? row.title, input.note ?? row.note, input.id]);
-      return toRunDto(ctx.deps.db.get<RunRow>('SELECT * FROM runs WHERE id = ?', [input.id])!);
+      return toRunDto(ctx.deps.db.get<RunRow>('SELECT * FROM runs WHERE id = ?', [input.id])!, ctx.userId);
     },
   ),
 

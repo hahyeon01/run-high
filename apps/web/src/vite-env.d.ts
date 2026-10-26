@@ -3,6 +3,9 @@
 interface ImportMetaEnv {
   /** 비우면 데모(기기 내 데이터) 모드, 값이 있으면 해당 API 서버 사용 ("/"는 같은 출처) */
   readonly VITE_API_URL?: string;
+  /** 코스 지도 스타일 URL (비우면 OpenFreeMap positron/dark) */
+  readonly VITE_MAP_STYLE_LIGHT?: string;
+  readonly VITE_MAP_STYLE_DARK?: string;
 }
 
 interface ImportMeta {

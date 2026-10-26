@@ -264,3 +264,42 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ---------- 코스 지도(MapLibre) 컨트롤: 앱 토큰에 맞춤 ---------- */
+.maplibregl-ctrl-group {
+  border-radius: 12px !important;
+  overflow: hidden;
+  background: var(--surface) !important;
+  box-shadow: 0 4px 14px -6px rgb(var(--shadow-color) / 0.35) !important;
+}
+.maplibregl-ctrl-group button {
+  width: 38px !important;
+  height: 38px !important;
+  color: var(--ink);
+}
+.maplibregl-ctrl-group button + button {
+  border-top-color: var(--line) !important;
+}
+.maplibregl-ctrl-group .runhigh-fit-course {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+[data-theme='dark'] .maplibregl-ctrl-group .maplibregl-ctrl-icon {
+  filter: invert(1);
+}
+.maplibregl-ctrl-attrib.maplibregl-attrib-empty {
+  display: none;
+}
+.maplibregl-ctrl-attrib {
+  font-size: 10.5px;
+  background: color-mix(in srgb, var(--surface) 82%, transparent) !important;
+  color: var(--ink-2);
+}
+.maplibregl-ctrl-attrib a {
+  color: var(--ink-2) !important;
+}
+.maplibregl-cooperative-gesture-screen {
+  font-family: var(--font-sans);
+  font-size: 15px;
+}

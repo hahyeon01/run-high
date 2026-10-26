@@ -18,7 +18,7 @@ import {
 import { computeLevel, LEVEL_WINDOW_DAYS, type RunnerLevel, type RunSample } from '../stats/level.ts';
 import { computeTrust, type TrustScore } from '../stats/trust.ts';
 import { paceOf } from '../stats/pace.ts';
-import type { LatLng } from '../stats/geo.ts';
+import { hideRouteEnds, type LatLng } from '../stats/geo.ts';
 import { forbidden, notFound } from '../util/errors.ts';
 import { newId } from '../util/ids.ts';
 import { parseJson, toJson } from '../util/json.ts';
@@ -270,7 +270,11 @@ export function userCard(ctx: Ctx, userId: string, opts: { forceStats?: boolean 
   };
 }
 
-export function toRunDto(row: RunRow): RunDto {
+/** viewerId: 기록을 보는 사람. 본인이 아니면 경로의 출발·도착 근처를 가림 */
+export function toRunDto(row: RunRow, viewerId: string | null): RunDto {
+  const full = row.route ? parseJson<LatLng[] | null>(row.route, null) : null;
+  const own = viewerId === row.user_id;
+  const route = !full || own ? full : hideRouteEnds(full);
   return {
     id: row.id,
     userId: row.user_id,
@@ -281,7 +285,8 @@ export function toRunDto(row: RunRow): RunDto {
     source: row.source,
     verified: row.verified === 1,
     sourceDetail: row.source_detail,
-    route: row.route ? parseJson<LatLng[] | null>(row.route, null) : null,
+    route,
+    routePrivacy: own || !full ? 'full' : route ? 'trimmed' : 'hidden',
     title: row.title,
     note: row.note,
     problems: parseJson<string[]>(row.problems, []),

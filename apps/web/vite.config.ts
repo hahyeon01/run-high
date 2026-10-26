@@ -30,6 +30,8 @@ export default defineConfig({
       },
     },
   },
+  // 지도 엔진(MapLibre)의 작업 스레드는 모듈 워커로 띄움
+  worker: { format: 'es' },
   test: {
     include: ['src/**/*.test.ts'],
   },

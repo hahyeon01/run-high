@@ -45,3 +45,31 @@ test('GPS 측정: 위치를 받아 측정을 시작·일시정지하고, 너무 
   await page.getByRole('dialog', { name: '기록을 버릴까요?' }).getByRole('button', { name: '버리기' }).click();
   await expect(page.getByRole('button', { name: '측정 시작' })).toBeEnabled();
 });
+
+test('기록 상세: 지도 위에 코스를 그리고, 지도를 못 받으면 코스 선만 보여 준다', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  // 외부 지도 서버 대신 배경만 있는 최소 스타일 (테스트가 네트워크에 기대지 않게)
+  const style = { version: 8, sources: {}, layers: [{ id: 'bg', type: 'background', paint: { 'background-color': '#eceee8' } }] };
+  await page.route('https://tiles.openfreemap.org/**', (route) =>
+    route.request().url().includes('/styles/') ? route.fulfill({ contentType: 'application/json', body: JSON.stringify(style) }) : route.abort(),
+  );
+  await loginDemo(page);
+  await page.goto('/#/records');
+  await page.locator('a[href*="#/records/run_"]').first().click();
+  const map = page.locator('[data-course-map]');
+  await expect(map).not.toHaveAttribute('data-course-map', 'loading', { timeout: 20_000 });
+  // WebGL이 있으면 지도, 없는 환경이면 코스 선 그림
+  const state = await map.getAttribute('data-course-map');
+  expect(['ready', 'fallback']).toContain(state);
+  if (state === 'ready') await expect(page.getByRole('button', { name: '코스 전체 보기' })).toBeVisible();
+  await expect(page.getByText('다른 러너에게는 출발·도착 근처 200m를 가리고 보여 줘요')).toBeVisible();
+
+  // 지도 서버에 닿지 못하면 코스 선 그림과 안내
+  await page.unroute('https://tiles.openfreemap.org/**');
+  await page.route('https://tiles.openfreemap.org/**', (route) => route.abort());
+  await page.reload();
+  await expect(map).toHaveAttribute('data-course-map', 'fallback', { timeout: 20_000 });
+  await expect(page.getByText('지도를 불러오지 못해 코스 모양만 보여요')).toBeVisible();
+  expect(errors).toEqual([]);
+});

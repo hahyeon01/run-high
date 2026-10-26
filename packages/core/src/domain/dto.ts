@@ -138,6 +138,8 @@ export interface RunDto {
   verified: boolean;
   sourceDetail: string | null;
   route: LatLng[] | null;
+  /** full: 본인에게 전체 경로 / trimmed: 다른 사람에게 출발·도착 근처를 가림 / hidden: 짧아서 경로 전체를 숨김 */
+  routePrivacy: 'full' | 'trimmed' | 'hidden';
   title: string | null;
   note: string | null;
   problems: string[];
